@@ -5,7 +5,7 @@ import functools
 from pymongo.errors import OperationFailure
 
 from scalymongo.errors import UnsafeBehaviorError, GlobalQueryException
-from scalymongo.helpers import is_update_modifier
+from scalymongo.helpers import is_update_modifier, value_or_result
 from scalymongo.schema import (
     SchemaDocument,
     SchemaMetaclass,
@@ -38,6 +38,13 @@ class Document(SchemaDocument):
 
     __metaclass__ = DocumentMetaclass
     abstract = True
+    defaults = {}
+    """Default values for fields."""
+
+    def __init__(self, *args, **kwargs):
+        SchemaDocument.__init__(self, *args, **kwargs)
+        for key, value in self.defaults.iteritems():
+            self.setdefault(key, value_or_result(value))
 
     def save(self):
         if '_id' in self:
