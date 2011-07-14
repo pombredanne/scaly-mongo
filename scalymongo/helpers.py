@@ -32,6 +32,11 @@ def value_or_result(potential):
     return potential
 
 
+class ClassDefault(object):
+    """A marker value to signal that a value should use the default for its class.
+    """
+
+
 class ConversionDict(dict):
     """A :class:`dict` subclass that wraps contents on lookup.
 
